@@ -1,0 +1,53 @@
+/* src/app/components/quotes/quotes.component.css */
+.quotes-container {
+  /* max-width: 1200px; */
+  max-width: 90vw;
+  margin: 1rem auto;
+  font-family: Arial, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+th, td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #ddd;
+  text-align: right;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+td.up {
+  color: #0a7a0a;
+}
+
+td.down {
+  color: #b00020;
+}
+
+.error {
+  color: #b00020;
+  margin-top: 0.5rem;
+}
+
+.summary-row {
+  border-top: 2px solid #999;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.symbol-label {
+  font-size: 1.25rem;
+}
+
+td.total-pl,
+td.total-pl-pct {
+  font-weight: 700;
+}
