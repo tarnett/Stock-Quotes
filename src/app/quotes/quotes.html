@@ -5,81 +5,80 @@
   <button (click)="loadQuotes()">Refresh now</button>
 
   @if (loading) {
-    <div>Loading...</div>
+  <div>Loading...</div>
   }
 
   @if (error) {
-    <div class="error">{{ error }}</div>
+  <div class="error">{{ error }}</div>
   }
 
   @if (rows.length && !loading) {
-    <table>
-      <thead>
-        <tr>
-          <th>Symbol</th>
-          <th> </th>
-          <th>Shares</th>
-          <th>Purchase</th>
-          <th>Last</th>
-          <th>Change</th>
-          <th>% Chg</th>
-          <th>Day P/L</th>
-          <th>Total Value</th>
-          <th>Total P/L</th>
-          <th>Ttl P/L %</th>
-          <th>Open</th>
-          <th>Prev</th>
-          <th>Volume</th>
-          <th>Last Updated</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of rows; track row.symbol) {
-          <tr class="symbol-label">
-            <td>{{ row.symbol }}</td>
-            <td><span style='color: green; font-weight: bold;'>{{ row.name }}</span></td>
-            <td>{{ row.shares | number:'1.0-0' }}</td>
-            <td>{{ row.costBasis | currency }}</td>
-            <td>{{ row.quote.last | number:'1.2-2' }}</td>
-            <td [class.up]="isUp(row)" [class.down]="isDown(row)">
-              {{ row.quote.change | number:'1.2-2' }}
-            </td>
-            <td [class.up]="isUp(row)" [class.down]="isDown(row)">
-              {{ row.quote.change_pct | number:'1.2-2' }}%
-            </td>
-            <td [class.up]="isUp(row.dayPnl)" [class.down]="isDown(row.dayPnl)">
-              {{ row.dayPnl | currency }}
-            </td>
-            <td>{{ row.marketValue | currency }}</td>
-            <td class="total-pl" [class.up]="isUp(row.totalPnl)" [class.down]="isDown(row.totalPnl)">
-              {{ row.totalPnl | currency }}
-            </td>
-            <td class="total-pl-pct" [class.up]="isUp(row.totalPnlPct)" [class.down]="isDown(row.totalPnlPct)">
-              {{ row.totalPnlPct | number:'1.2-2' }}%
-            </td>
-            <td>{{ row.quote.open | number:'1.2-2' }}</td>
-            <td>{{ row.quote.previousClose | number:'1.2-2' }}</td>
-            <td>{{ row.quote.volume | number }}</td>
-            <td>{{ row.quote.responseTime | date:'short' }}</td>
-          </tr>
-        }
-        <tr class="summary-row">
-          <td colspan="6">Portfolio Totals</td>
-          <td [class.up]="isUp(summary.totalDayPnl)" [class.down]="isDown(summary.totalDayPnl)">
-            {{ summary.totalDayPnl | currency }}
-          </td>
-          <td>{{ summary.totalMarketValue | currency }}</td>
-          <td>{{ summary.totalCost | currency }}</td>
-          <td [class.up]="isUp(summary.totalPnl)" [class.down]="isDown(summary.totalPnl)">
-            {{ summary.totalPnl | currency }}
-          </td>
-          <td [class.up]="isUp(summary.totalPnlPct)" [class.down]="isDown(summary.totalPnlPct)">
-            {{ summary.totalPnlPct | number:'1.2-2' }}%
-          </td>
-          <td colspan="4"></td>
-        </tr>
-      </tbody>
-    </table>
+  <table>
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th> </th>
+        <th>Shares</th>
+        <th>Purchase</th>
+        <th>Last</th>
+        <th>Change</th>
+        <th>% Chg</th>
+        <th>Day P/L</th>
+        <th>Total Value</th>
+        <th>Total P/L</th>
+        <th>Ttl P/L %</th>
+        <th>Open</th>
+        <th>Prev</th>
+        <th>Volume</th>
+        <th>Last Updated</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows; track row.symbol) {
+      <tr class="symbol-label">
+        <td>{{ row.symbol }}</td>
+        <td><span style='color: green; font-weight: bold;'>{{ row.name }}</span></td>
+        <td>{{ row.shares | number:'1.0-0' }}</td>
+        <td>{{ row.costBasis | currency }}</td>
+        <td>{{ row.quote.last | number:'1.2-2' }}</td>
+        <td [class.up]="isUp(row)" [class.down]="isDown(row)">
+          {{ row.quote.change | number:'1.2-2' }}
+        </td>
+        <td [class.up]="isUp(row)" [class.down]="isDown(row)">
+          {{ row.quote.change_pct | number:'1.2-2' }}%
+        </td>
+        <td [class.up]="isUp(row.dayPnl)" [class.down]="isDown(row.dayPnl)">
+          {{ row.dayPnl | currency }}
+        </td>
+        <td>{{ row.marketValue | currency }}</td>
+        <td class="total-pl" [class.up]="isUp(row.totalPnl)" [class.down]="isDown(row.totalPnl)">
+          {{ row.totalPnl | currency }}
+        </td>
+        <td class="total-pl-pct" [class.up]="isUp(row.totalPnlPct)" [class.down]="isDown(row.totalPnlPct)">
+          {{ row.totalPnlPct | number:'1.2-2' }}%
+        </td>
+        <td>{{ row.quote.open | number:'1.2-2' }}</td>
+        <td>{{ row.quote.previousClose | number:'1.2-2' }}</td>
+        <td>{{ row.quote.volume | number }}</td>
+        <td>{{ row.quote.responseTime | date:'short' }}</td>
+      </tr>
+      }
+      <tr class="summary-row">
+        <td colspan="6">Portfolio Totals</td>
+        <td [class.up]="isUp(summary.totalDayPnl)" [class.down]="isDown(summary.totalDayPnl)">
+          {{ summary.totalDayPnl | currency }}
+        </td>
+        <td>{{ summary.totalMarketValue | currency }}</td>
+        <td>{{ summary.totalCost | currency }}</td>
+        <td [class.up]="isUp(summary.totalPnl)" [class.down]="isDown(summary.totalPnl)">
+          {{ summary.totalPnl | currency }}
+        </td>
+        <td [class.up]="isUp(summary.totalPnlPct)" [class.down]="isDown(summary.totalPnlPct)">
+          {{ summary.totalPnlPct | number:'1.2-2' }}%
+        </td>
+        <td colspan="4"></td>
+      </tr>
+    </tbody>
+  </table>
   }
 </div>
-
