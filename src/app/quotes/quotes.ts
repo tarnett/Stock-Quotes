@@ -83,26 +83,24 @@ export class QuotesComponent implements OnInit, OnDestroy {
     this.refreshSub?.unsubscribe();
   }
 
-  loadQuotes(): void {
+  async loadQuotes(): Promise<void> {
+    if (this.loading) return;
+
     this.loading = true;
     this.error = null;
 
-    this.quoteService.getQuotes(this.symbols).subscribe({
-      next: (data) => {
-        this.quotes = data;
-        this.buildRowsAndSummary(data);
-        this.currentDate = new Date();
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Failed to load quotes.';
-        console.log('Error loading quotes:', err);
-        this.loading = false;
-        this.cdr.markForCheck();
-      }
-    });
+    try {
+      const data = await this.quoteService.getQuotes(this.symbols);
+      this.quotes = data;
+      this.buildRowsAndSummary(data);
+      this.currentDate = new Date();
+    } catch (err) {
+      console.error('Error loading quotes:', err);
+      this.error = 'Failed to load quotes.';
+    } finally {
+      this.loading = false;
+      this.cdr.markForCheck();
+    }
   }
 
   private buildRowsAndSummary(quotes: CnbcQuote[]): void {
