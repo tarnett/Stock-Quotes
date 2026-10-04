@@ -1,7 +1,7 @@
 // src/app/services/quote.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CnbcQuote } from '../models/cnbcQuote';
 
@@ -19,31 +19,33 @@ interface RawQuote {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuoteService {
   constructor(private http: HttpClient) {}
 
-  getQuotes(symbols: string[]): Observable<CnbcQuote[]> {
+  getQuotes(symbols: string[]): Promise<CnbcQuote[]> {
     const encodedSymbols = symbols.map((symbol) => symbol.trim()).join('|');
     const url = `${environment.cnbcQuoteUrl}${encodedSymbols}`;
 
-    return this.http.get(url, { responseType: 'text' }).pipe(
-      map((rawResponse) => {
-        const rows = this.parseResponse(rawResponse);
-        return rows.map((q) => ({
-          symbol: q.symbol ?? '',
-          last: Number(q.last ?? 0),
-          change: Number(q.change ?? 0),
-          change_pct: Number(q.change_pct ?? 0),
-          volume: Number(q.volume ?? 0),
-          high: Number(q.high ?? 0),
-          low: Number(q.low ?? 0),
-          open: Number(q.open ?? 0),
-          previousClose: Number(q.previous_day_closing ?? 0),
-          responseTime: q.responseTime ?? ''
-        }));
-      })
+    return firstValueFrom(
+      this.http.get(url, { responseType: 'text' }).pipe(
+        map((rawResponse) => {
+          const rows = this.parseResponse(rawResponse);
+          return rows.map((q) => ({
+            symbol: q.symbol ?? '',
+            last: Number(q.last ?? 0),
+            change: Number(q.change ?? 0),
+            change_pct: Number(q.change_pct ?? 0),
+            volume: Number(q.volume ?? 0),
+            high: Number(q.high ?? 0),
+            low: Number(q.low ?? 0),
+            open: Number(q.open ?? 0),
+            previousClose: Number(q.previous_day_closing ?? 0),
+            responseTime: q.responseTime ?? '',
+          }));
+        })
+      )
     );
   }
 
@@ -87,7 +89,8 @@ export class QuoteService {
     }
 
     const nodes = Array.from(document.querySelectorAll('quickQuote'));
-    return nodes.map((node) => {
+    return nodes
+    .map((node) => {
       const read = (tag: string): string => node.querySelector(tag)?.textContent?.trim() ?? '0';
       // switch (read('symbol')) {
       //   case 'SPCX':
@@ -103,8 +106,9 @@ export class QuoteService {
         low: read('low'),
         open: read('open'),
         previous_day_closing: read('previous_day_closing'),
-        responseTime: read('last_time')
+        responseTime: read('last_time'),
       };
-    }).filter((quote) => quote.symbol.length > 0);
+    })
+    .filter((quote) => quote.symbol.length > 0);
   }
 }
