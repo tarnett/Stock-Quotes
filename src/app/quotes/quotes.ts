@@ -77,6 +77,8 @@ export class QuotesComponent implements OnInit, OnDestroy {
   }
 
   async loadQuotes(): Promise<void> {
+    if (this.loading) return;
+
     this.loading = true;
     this.error = null;
 
@@ -86,9 +88,8 @@ export class QuotesComponent implements OnInit, OnDestroy {
       this.buildRowsAndSummary(data);
       this.currentDate = new Date();
     } catch (err) {
-      console.error(err);
+      console.error('Error loading quotes:', err);
       this.error = 'Failed to load quotes.';
-      console.log('Error loading quotes:', err);
     } finally {
       this.loading = false;
       this.cdr.markForCheck();

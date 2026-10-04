@@ -48,7 +48,6 @@ export class QuoteService {
       )
     );
   }
-
   private parseResponse(payload: string): RawQuote[] {
     const trimmed = payload.trim();
 
