@@ -1,7 +1,7 @@
 // src/app/services/quote.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CnbcQuote } from '../models/cnbcQuote';
 
@@ -24,11 +24,11 @@ interface RawQuote {
 export class QuoteService {
   constructor(private http: HttpClient) {}
 
-  getQuotes(symbols: string[]): Observable<CnbcQuote[]> {
+  async getQuotes(symbols: string[]): Promise<CnbcQuote[]> {
     const encodedSymbols = symbols.map((symbol) => symbol.trim()).join('|');
     const url = `${environment.cnbcQuoteUrl}${encodedSymbols}`;
 
-    return this.http.get(url, { responseType: 'text' }).pipe(
+    return firstValueFrom(this.http.get(url, { responseType: 'text' }).pipe(
       map((rawResponse) => {
         const rows = this.parseResponse(rawResponse);
         return rows.map((q) => ({
@@ -44,7 +44,7 @@ export class QuoteService {
           responseTime: q.responseTime ?? ''
         }));
       })
-    );
+    ));
   }
 
   private parseResponse(payload: string): RawQuote[] {
